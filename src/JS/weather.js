@@ -15,7 +15,18 @@ if (!city) {
 
     async function fetchWeather(cityName) {
         try {
-            const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`);
+            const geoRes = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`);
+            console.log("Geo Response: ", geoRes);
+
+            if (!geoRes.ok) {
+                throw new Error("Geocoding API failed");
+            }
+
+            const geoData = await geoRes.json();
+            console.log("Geo Data: ", geoData);
+
+            let { lat, lon  } = geoData[0];
+            
         } catch (error) {
             console.log("Fetch error: ", error);
             loading.classList.add("hidden");
